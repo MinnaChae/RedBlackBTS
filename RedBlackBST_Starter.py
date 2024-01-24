@@ -69,57 +69,41 @@ class RedBlackBST:
                     insert_node.parent = curr
                 curr = curr.right
             else:
+                curr.value = value
                 break
-
-
-
-            #insert node
-        # self.root = self._put_r(self.root, key, value)
-        # self.root.is_red = False
-        # if node is None:
-        #     return RedBlackBST.RedBlackNode(key, value)
-        #
-        # if key < node.key:
-        #     node.left = self._put_r(node.left, key, value)
-        # elif key > node.key:
-        #     node.right = self._put_r(node.right, key, value)
-        # else:
-        #     node.value = value
-            #Rotate Node
-        # if self._right_is_red(node) and not self._left_is_red(node):
-        #     node = self._rotate_left_r(node)
-        # if self._left_left_is_red(node):
-        #     node = self._rotate_right_r(node)
-        # if self._left_is_red(node) and self._right_is_red(node):
-        #     self._flip_colors(node)
 
         # ONCE INSERTED, TRAVERSE UP CURR.PARENT - bubble up
             #Rotate Node
         temp = curr.parent
 
         while temp:
+            parent_node = temp.parent
             if self._right_is_red(temp) and not self._left_is_red(temp):
-                temp = self._rotate_left_i(temp)
-                if temp.parent is None:
+                if parent_node is None:
+                    temp = self._rotate_left_i(temp)
                     self.root = temp
-                    # break
+                elif parent_node.left == temp:
+                    temp = self._rotate_left_i(temp)
+                    parent_node.left = temp
                 else:
-                    temp.parent.right = temp
+                    temp = self._rotate_left_i(temp)
+                    parent_node.right = temp
             if self._left_left_is_red(temp):
-                temp = self._rotate_right_i(temp)
                 if temp.parent is None:
+                    temp = self._rotate_right_i(temp)
                     self.root = temp
                     # break
+                elif parent_node.left == temp:
+                    temp = self._rotate_right_i(temp)
+                    parent_node.left = temp
                 else:
-                    temp.parent.left = temp
-                # curr = curr.parent
+                    temp = self._rotate_right_i(temp)
+                    parent_node.right = temp
             if self._left_is_red(temp) and self._right_is_red(temp):
                 self._flip_colors(temp)
             if self.root == temp:
                 break
             temp = temp.parent
-            # return node
-        # curr.parent = temp
         self.root.is_red = False
 
     def _rotate_left_i(self, node):
@@ -129,6 +113,7 @@ class RedBlackBST:
         """
         #node is curr.parent
         x = node.right
+        #changing pointers
         node.right = x.left
         x.left = node
         x.parent = node.parent
@@ -156,7 +141,7 @@ class RedBlackBST:
 ########### THE BELOW METHODS ARE FOR STUDENT USE AND CAN BE USED AS IS IN THE INTERATIVE IMPLEMENTATION
 
     def _flip_colors(self, node):
-        """Using the provided `node`, set both child links to black, and set the parent link to `Red`.
+        """Using the provided `node`, set both child linacks to black, and set the parent link to `Red`.
         :param node: The node for which the child colors and parent link should have their colors flipped.
         :return: None
         """
@@ -339,54 +324,93 @@ def test_bst(bst):
     print(f"Test repeat Keys: {result}")
 
 
-
+#
 # if __name__ == "__main__":
-bst = RedBlackBST()
-recur = RedBlackBST()
-# test_bst(bst)
-# kvs_to_insert = [(1, 'one'),
-#                  (2, 'two'),
-#                  (3, 'three'),
-#                  (4, 'four'),
-#                  (5, 'five')]
-# for kv in kvs_to_insert:
-#     key, value = kv
-#     bst.insert_r(key, value)
+#     # bst = RedBlackBST()
+#     recur = RedBlackBST()
+#     # test_bst(bst)
+#     # kvs_to_insert = [(1, 'one'),
+#     #                  (2, 'two'),
+#     #                  (3, 'three'),
+#     #                  (4, 'four'),
+#     #                  (5, 'five')]
+#
+#     # kvs_to_insert = [('ab', 1),
+#     #                  ('bc', 2),
+#     #                  ('cd', 3),
+#     #                  ('de', 4),
+#     #                  ('ef', 5)]
+#     # kvs_to_insert = [('one', 5),
+#     #                  ('two', 4),
+#     #                  ('three', 3),
+#     #                  ('four', 2),
+#     #                  ('five', 1)]
+#
+#     kvs_to_insert = [(4, 'one'),
+#                      (2, 'two'),
+#                      (3, 'three'),
+#                      (1, 'four'),
+#                      (5, 'five')]
+#
+#     kvs_to_insert = [(4, 'one'),
+#                      (2, 'two'),
+#                      (3, 'three'),
+#                      (5, 'four'),
+#                      (7, 'five')]
+#
+#     #
+#     for kv in kvs_to_insert:
+#         key, value = kv
+#         recur.insert_r(key, value)
+#     #
+#     for kv in kvs_to_insert:
+#         key, value = kv
+#         bst.insert_i(key, value)
+#
+#     #insert i
+#     # bst.insert_i(1, 'x')
+#     # bst.insert_i(2, 'y')
+#     # bst.insert_i(3, 'z')
+#     # bst.insert_i(4, 'a')
+#     # bst.insert_i(5, 'b')
+#
+#     # bst.insert_i(10, 'c')
+#     # bst.insert_i(9, 'a')
+#     # bst.insert_i(8, 'z')
+#     # bst.insert_i(7, 'y')
+#     # bst.insert_i(6, 'x')
+#     # bst.insert_i(5, 'c')
+#     # bst.insert_i(4, 'a')
+#     # bst.insert_i(3, 'z')
+#     # bst.insert_i(2, 'y')
+#     # bst.insert_i(1, 'x')
+#     #
+#     #
+#     # # #insert r
+#     # # recur.insert_r(1, 'c')
+#     # # recur.insert_r(2, 'a')
+#     # # recur.insert_r(3, 'z')
+#     # # recur.insert_r(4, 'y')
+#     # # recur.insert_r(5, 'x')
+#     #
+#     # recur.insert_r(10, 'c')
+#     # recur.insert_r(9, 'a')
+#     # recur.insert_r(8, 'z')
+#     # recur.insert_r(7, 'y')
+#     # recur.insert_r(6, 'x')
+#     # recur.insert_r(5, 'c')
+#     # recur.insert_r(4, 'a')
+#     # recur.insert_r(3, 'z')
+#     # recur.insert_r(1, 'one')
+#     # recur.insert_r(1, 'x')
+#     #
+#     #
+#     # #
+#     print("\nthis is mine \n")
+#     bst.pre_order_recursive(bst.root)
+#     print("\nthis is recur \n")
+#     bst.pre_order_recursive(recur.root)
 
-#insert i
-bst.insert_i(1, 'x')
-bst.insert_i(2, 'y')
-bst.insert_i(3, 'z')
-bst.insert_i(4, 'a')
-bst.insert_i(5, 'b')
-
-# bst.insert_i(5, 'c')
-# bst.insert_i(4, 'a')
-# bst.insert_i(3, 'z')
-# bst.insert_i(2, 'y')
-# bst.insert_i(1, 'x')
-
-
-# #insert r
-recur.insert_r(1, 'c')
-recur.insert_r(2, 'a')
-recur.insert_r(3, 'z')
-recur.insert_r(4, 'y')
-recur.insert_r(5, 'x')
-
-
-# recur.insert_r(5, 'c')
-# recur.insert_r(4, 'a')
-# recur.insert_r(3, 'z')
-# recur.insert_r(2, 'y')
-# recur.insert_r(1, 'x')
-
-
-
-print("\nthis is mine \n")
-bst.pre_order_recursive(bst.root)
-print("\nthis is recur \n")
-bst.pre_order_recursive(recur.root)
 
 # for nodes in bst:
     # print(bst.nodes)
