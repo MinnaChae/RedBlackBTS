@@ -1,3 +1,10 @@
+"""
+Minna Chae
+TCSS 503
+HW1: RedBlackBST
+"""
+
+
 class RedBlackBST:
     """ A Python Implementation of a Red-Black Binary Search Tree
     """
@@ -30,6 +37,7 @@ class RedBlackBST:
             p_node = "None" if self.parent is None else self.parent.key
             p_link = " Red " if self.is_red else "Black"
             return f"({l_node})<--[{l_link}]--({self.key})--[{r_link}]-->({r_node}) [Parent: ({p_node})]"
+            # return f"({l_node})<--[{l_link}]--({self.key})--[{r_link}]-->({r_node})"
 
     def __init__(self):
         """Creates an empty `RedBlackBST` (Red-Black Binary Search Tree)
@@ -39,7 +47,7 @@ class RedBlackBST:
 ### THE FOLLOWING THREE METHOD STUBS REQUIRE COMPLETION FOR ASSIGNMENT
 
     def insert_i(self, key, value):
-        """Insert the proper value using an iterative method of traversal.
+        """Inserts the proper value using an iterative method of traversal.
         Assumes the key provided is a comparable object, and assumes uniqueness.  If the `Key` already exists in the
         structure, the provided value will overwrite the previous value for this key.
         :param key: The unique, comparable object by which to retrieve the desired value.
@@ -74,10 +82,15 @@ class RedBlackBST:
 
         # ONCE INSERTED, TRAVERSE UP CURR.PARENT - bubble up
             #Rotate Node
-        temp = curr.parent
+        # temp = curr.parent
+        temp = curr
 
         while temp:
             parent_node = temp.parent
+            # grandparent_node = temp.parent.parent
+            # if self._right_is_red(parent_node) and self._left_is_red(temp):
+                #if parent exist and parent is red
+                    #parent.grandparent is red
             if self._right_is_red(temp) and not self._left_is_red(temp):
                 if parent_node is None:
                     temp = self._rotate_left_i(temp)
@@ -92,7 +105,6 @@ class RedBlackBST:
                 if temp.parent is None:
                     temp = self._rotate_right_i(temp)
                     self.root = temp
-                    # break
                 elif parent_node.left == temp:
                     temp = self._rotate_right_i(temp)
                     parent_node.left = temp
@@ -115,11 +127,23 @@ class RedBlackBST:
         x = node.right
         #changing pointers
         node.right = x.left
+        if x.left is not None:
+            x.left.parent = node
         x.left = node
         x.parent = node.parent
         node.parent = x
         x.is_red = node.is_red
         node.is_red = True
+
+        # #node is curr.parent
+        # x = node.right
+        # #changing pointers
+        # node.right = x.left
+        # x.left = node
+        # x.parent = node.parent
+        # node.parent = x
+        # x.is_red = node.is_red
+        # node.is_red = True
 
         return x
 
@@ -130,12 +154,23 @@ class RedBlackBST:
         """
 
         x = node.left
+        # x_right = x.right
         node.left = x.right
+        if x.right is not None:
+            x.right.parent = node
         x.right = node
         x.parent = node.parent
         node.parent = x
         x.is_red = node.is_red
         node.is_red = True
+
+        # x = node.left
+        # node.left = x.right
+        # x.right = node
+        # x.parent = node.parent
+        # node.parent = x
+        # x.is_red = node.is_red
+        # node.is_red = True
         return x
 
 ########### THE BELOW METHODS ARE FOR STUDENT USE AND CAN BE USED AS IS IN THE INTERATIVE IMPLEMENTATION
@@ -279,26 +314,44 @@ class RedBlackBST:
         x.is_red = node.is_red
         node.is_red = True
         return x
-    def pre_order_recursive(self, node):
-        curr = node
-        if curr is None:
-            return None
-        print(node)
-        self.in_order_recursive(curr.left)
-        self.in_order_recursive(curr.right)
-    def in_order_recursive(self, node):
-        curr = node
-        if curr is None:
-            return None
-        self.in_order_recursive(curr.left)
-        print(node)
-        self.in_order_recursive(curr.right)
+#print Pre order
+
+# class Node:
+#     def __init__(self, key, left=None, right=None):
+#         self.key = key
+#         self.left = left
+#         self.right = right
+
+
+# class PrintTree:
+#     def __init__(self, root=None):
+#         self.root = root
+
+    def pre_order_recursive(self, node, result=None):
+        if result is None:
+            result = []
+        if node is not None:
+            result.append(node)
+            self.pre_order_recursive(node.left, result)
+            self.pre_order_recursive(node.right, result)
+        return result
+
+    def in_order_recursive(self, node, result=None):
+        if result is None:
+            result = []
+        if node is not None:
+            self.in_order_recursive(node.left, result)
+            result.append(node)
+            self.in_order_recursive(node.right, result)
+        return result
+
 ########### END RECURSIVE SECTION
 
 
 def test_bst(bst):
     bst.insert_i(1, 'one')
     r = bst.search(1)
+
     result = "PASSED" if r == 'one' else f"FAILED, expected 'one', received {r}"
     print(f"Test Inserting Single Value...{result}")
 
@@ -323,94 +376,160 @@ def test_bst(bst):
     result = "PASSED" if r == 'one hundred' else f"Failed, expected 'one hundred', received {r}"
     print(f"Test repeat Keys: {result}")
 
+def test_bst_2(my_bst, recur_bst, kvs_to_insert):
+    for kv in kvs_to_insert:
+        key, value = kv
+        recur_bst.insert_r(key, value)
 
-#
-# if __name__ == "__main__":
-#     # bst = RedBlackBST()
-#     recur = RedBlackBST()
-#     # test_bst(bst)
-#     # kvs_to_insert = [(1, 'one'),
-#     #                  (2, 'two'),
-#     #                  (3, 'three'),
-#     #                  (4, 'four'),
-#     #                  (5, 'five')]
-#
-#     # kvs_to_insert = [('ab', 1),
-#     #                  ('bc', 2),
-#     #                  ('cd', 3),
-#     #                  ('de', 4),
-#     #                  ('ef', 5)]
-#     # kvs_to_insert = [('one', 5),
-#     #                  ('two', 4),
-#     #                  ('three', 3),
-#     #                  ('four', 2),
-#     #                  ('five', 1)]
-#
-#     kvs_to_insert = [(4, 'one'),
-#                      (2, 'two'),
-#                      (3, 'three'),
-#                      (1, 'four'),
-#                      (5, 'five')]
-#
-#     kvs_to_insert = [(4, 'one'),
-#                      (2, 'two'),
-#                      (3, 'three'),
-#                      (5, 'four'),
-#                      (7, 'five')]
-#
-#     #
-#     for kv in kvs_to_insert:
-#         key, value = kv
-#         recur.insert_r(key, value)
-#     #
-#     for kv in kvs_to_insert:
-#         key, value = kv
-#         bst.insert_i(key, value)
-#
-#     #insert i
-#     # bst.insert_i(1, 'x')
-#     # bst.insert_i(2, 'y')
-#     # bst.insert_i(3, 'z')
-#     # bst.insert_i(4, 'a')
-#     # bst.insert_i(5, 'b')
-#
-#     # bst.insert_i(10, 'c')
-#     # bst.insert_i(9, 'a')
-#     # bst.insert_i(8, 'z')
-#     # bst.insert_i(7, 'y')
-#     # bst.insert_i(6, 'x')
-#     # bst.insert_i(5, 'c')
-#     # bst.insert_i(4, 'a')
-#     # bst.insert_i(3, 'z')
-#     # bst.insert_i(2, 'y')
-#     # bst.insert_i(1, 'x')
-#     #
-#     #
-#     # # #insert r
-#     # # recur.insert_r(1, 'c')
-#     # # recur.insert_r(2, 'a')
-#     # # recur.insert_r(3, 'z')
-#     # # recur.insert_r(4, 'y')
-#     # # recur.insert_r(5, 'x')
-#     #
-#     # recur.insert_r(10, 'c')
-#     # recur.insert_r(9, 'a')
-#     # recur.insert_r(8, 'z')
-#     # recur.insert_r(7, 'y')
-#     # recur.insert_r(6, 'x')
-#     # recur.insert_r(5, 'c')
-#     # recur.insert_r(4, 'a')
-#     # recur.insert_r(3, 'z')
-#     # recur.insert_r(1, 'one')
-#     # recur.insert_r(1, 'x')
-#     #
-#     #
-#     # #
-#     print("\nthis is mine \n")
-#     bst.pre_order_recursive(bst.root)
-#     print("\nthis is recur \n")
-#     bst.pre_order_recursive(recur.root)
+    for kv in kvs_to_insert:
+        key, value = kv
+        my_bst.insert_i(key, value)
+
+    tree_recur = recur_bst.pre_order_recursive(recur_bst.root)
+    tree_my = my_bst.pre_order_recursive(my_bst.root)
+    different = ""
+    different_count = 0
+    same = ""
+    same_count = 0
+    total = 0
+    print("Printing Test")
+    # print(f"this is len {len(tree_recur)}")
+    #
+    # for i in range(len(tree_recur)):
+    #     print(f'this is recur {tree_recur[i].key}')
+    #     print(f'this is my {tree_my[i].key}')
+
+    for i in range(len(tree_recur)):
+        total +=1
+        # testing key
+        if tree_recur[i].key == tree_my[i].key:
+            # print(f"Key Same: Expected {tree_recur[i].key} and got {tree_my[i].key}")
+            same += f"Key Same: Expected {tree_recur[i].key} and got {tree_my[i].key}"
+            same_count += 1
+        else:
+            # print(f"Key Different: Expected {tree_recur[i].key} but got {tree_my[i].key}")
+            different += f"Key Different: Expected {tree_recur[i].key} but got {tree_my[i].key}"
+            different_count +=1
+
+        # testing value
+        if tree_recur[i].value == tree_my[i].value:
+            # print(f"Value Same: Expected {tree_recur[i].value} and got {tree_my[i].value}")
+            same += f" | Value Same: Expected {tree_recur[i].value} and got {tree_my[i].value}"
+            same_count += 1
+        else:
+            # print(f" | Value Different: Expected {tree_recur[i].value} but got {tree_my[i].value}")
+            different += f" | Value Different: Expected {tree_recur[i].value} but got {tree_my[i].value}"
+            different_count += 1
+        # testing left and color
+        if tree_recur[i].left:
+            if tree_recur[i].left.is_red:
+                recur_color = "red"
+            else:
+                recur_color = "black"
+            if tree_my[i].left.is_red:
+                my_color = "red"
+            else:
+                my_color = "black"
+
+            if tree_recur[i].left.key == tree_my[i].left.key and tree_recur[i].left.is_red == tree_my[i].left.is_red:
+                # print(f"Left Same: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}")
+                same += f" | Left Same: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}"
+                same_count += 1
+
+            else:
+                # print(f"Left Different: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}")
+                different += f" | Left Different: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}"
+                different_count += 1
+            # testing right and color
+        if tree_recur[i].right:
+            if tree_recur[i].right.is_red:
+                recur_color = "red"
+            else:
+                recur_color = "black"
+            if tree_my[i].right.is_red:
+                my_color = "red"
+            else:
+                my_color = "black"
+            if tree_recur[i].right.key == tree_my[i].right.key and tree_recur[i].right.is_red == tree_my[
+                i].right.is_red:
+                # print(f"Left Same: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}")
+                same += f" | Right Same: Expected {tree_recur[i].right.key} {recur_color} and got {tree_my[i].right.key} {my_color}"
+                same_count += 1
+            else:
+                # print(f"Left Different: Expected {tree_recur[i].left.key} {recur_color} and got {tree_my[i].left.key} {my_color}")
+                different += f" | Right Different: Expected {tree_recur[i].right.key} {recur_color} and got {tree_my[i].right.key} {my_color}"
+                different_count += 1
+        if same != "":
+            print(same)
+        if different != "":
+            print(different)
+        same = ""
+        different = ""
+    if same_count != 0:
+        print(f'Passed {same_count}/{same_count+different_count} tests \n')
+    if different_count != 0:
+        print(f'Failed {different_count}/{same_count+different_count} tests \n')
 
 
-# for nodes in bst:
-    # print(bst.nodes)
+
+if __name__ == "__main__":
+    bst = RedBlackBST()
+    kvs_to_insert = [(1, 'one'),
+                     (2, 'two'),
+                     (3, 'three'),
+                     (4, 'four'),
+                     (5, 'five'),
+                     (6, 'six'),
+                     (7, 'seven'),
+                     (8, 'eight'),
+                     (9, 'nine'),
+                     (10, 'ten'),
+                     (11, 'ele')]
+
+    my_bst = RedBlackBST()
+    recur_bst = RedBlackBST()
+    test_bst_2(my_bst, recur_bst, kvs_to_insert)
+
+    kvs_to_insert2 = [(1, 'one'),
+                     (2, 'two'),
+                     (3, 'three'),
+                     (4, 'four'),
+                     (5, 'five')]
+
+    my_bst2 = RedBlackBST()
+    recur_bst2 = RedBlackBST()
+    test_bst_2(my_bst2, recur_bst2, kvs_to_insert2)
+
+    kvs_to_insert3 = [('ab', 1),
+                     ('bc', 2),
+                     ('cd', 3),
+                     ('de', 4),
+                     ('ef', 5)]
+    my_bst3 = RedBlackBST()
+    recur_bst3 = RedBlackBST()
+    test_bst_2(my_bst3, recur_bst3, kvs_to_insert3)
+
+    kvs_to_insert4 = [('one', 5),
+                     ('two', 4),
+                     ('three', 3),
+                     ('four', 2),
+                     ('five', 1)]
+    my_bst4 = RedBlackBST()
+    recur_bst4 = RedBlackBST()
+    test_bst_2(my_bst4, recur_bst4, kvs_to_insert4)
+
+    kvs_to_insert5 = [(10, 'c'),
+                    (9, 'a'),
+                    (8, 'z'),
+                    (7, 'y'),
+                    (6, 'x'),
+                    (5, 'c'),
+                    (4, 'a'),
+                    (3, 'z'),
+                    (2, 'y'),
+                    (1, 'x')]
+    my_bst5 = RedBlackBST()
+    recur_bst5 = RedBlackBST()
+    test_bst_2(my_bst5, recur_bst5, kvs_to_insert5)
+
+
