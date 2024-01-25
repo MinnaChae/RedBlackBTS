@@ -37,7 +37,6 @@ class RedBlackBST:
             p_node = "None" if self.parent is None else self.parent.key
             p_link = " Red " if self.is_red else "Black"
             return f"({l_node})<--[{l_link}]--({self.key})--[{r_link}]-->({r_node}) [Parent: ({p_node})]"
-            # return f"({l_node})<--[{l_link}]--({self.key})--[{r_link}]-->({r_node})"
 
     def __init__(self):
         """Creates an empty `RedBlackBST` (Red-Black Binary Search Tree)
@@ -342,7 +341,7 @@ def test_bst(bst):
     result = "PASSED" if r == 'one hundred' else f"Failed, expected 'one hundred', received {r}"
     print(f"Test repeat Keys: {result}")
 
-def test_bst_2(my_bst, recur_bst, kvs_to_insert):
+def test_bst_expected_output(my_bst, recur_bst, kvs_to_insert):
     for kv in kvs_to_insert:
         key, value = kv
         recur_bst.insert_r(key, value)
@@ -430,9 +429,22 @@ def test_bst_2(my_bst, recur_bst, kvs_to_insert):
     if different_count != 0:
         print(f'Failed {different_count}/{same_count+different_count} tests \n')
 
+    def test_search():
+        #search both trees for value
+        pass
+
+    def test_parent(my_bst, input_list):
+        for kv in kvs_to_insert:
+            key, value = kv
+            my_bst.insert_i(key, value)
+        #find key, value
+        #look for key/value parent
+        r = bst.search(100)
+
+
 if __name__ == "__main__":
     bst = RedBlackBST()
-    kvs_to_insert = [(1, 'one'),
+    kvs_to_insert_ascending = [(1, 'one'),
                      (2, 'two'),
                      (3, 'three'),
                      (4, 'four'),
@@ -444,39 +456,45 @@ if __name__ == "__main__":
                      (10, 'ten'),
                      (11, 'ele')]
 
-    my_bst = RedBlackBST()
-    recur_bst = RedBlackBST()
-    test_bst_2(my_bst, recur_bst, kvs_to_insert)
+    my_bst_ascending = RedBlackBST()
+    recur_bst_ascending = RedBlackBST()
+    test_bst_expected_output(my_bst_ascending, recur_bst_ascending, kvs_to_insert_ascending)
 
-    kvs_to_insert2 = [(1, 'one'),
-                     (2, 'two'),
-                     (3, 'three'),
-                     (4, 'four'),
-                     (5, 'five')]
+    kvs_to_insert_random_long = [(5, 'cat'),
+                     (3, 'dog'),
+                     (7, 'rabbit'),
+                     (2, 'John'),
+                     (19, 'Sarah'),
+                     (30, 'a'),
+                     (1, 'q'),
+                     (21, 'n'),
+                     (4, 'alpha'),
+                     (8, 'tango'),
+                     (6, 'lima')]
 
-    my_bst2 = RedBlackBST()
-    recur_bst2 = RedBlackBST()
-    test_bst_2(my_bst2, recur_bst2, kvs_to_insert2)
+    my_bst_random_long = RedBlackBST()
+    recur_bst_random_long = RedBlackBST()
+    test_bst_expected_output(my_bst_random_long, recur_bst_random_long, kvs_to_insert_random_long)
 
-    kvs_to_insert3 = [('ab', 1),
+    kvs_to_insert_letters_inorder = [('ab', 1),
                      ('bc', 2),
                      ('cd', 3),
                      ('de', 4),
                      ('ef', 5)]
-    my_bst3 = RedBlackBST()
-    recur_bst3 = RedBlackBST()
-    test_bst_2(my_bst3, recur_bst3, kvs_to_insert3)
+    my_bst_letters_inorder = RedBlackBST()
+    recur_bst_letters_inorder = RedBlackBST()
+    test_bst_expected_output(my_bst_letters_inorder, recur_bst_letters_inorder, kvs_to_insert_letters_inorder)
 
-    kvs_to_insert4 = [('one', 5),
+    kvs_to_insert_letters_randomorder = [('one', 5),
                      ('two', 4),
                      ('three', 3),
                      ('four', 2),
                      ('five', 1)]
     my_bst4 = RedBlackBST()
     recur_bst4 = RedBlackBST()
-    test_bst_2(my_bst4, recur_bst4, kvs_to_insert4)
+    test_bst_expected_output(my_bst4, recur_bst4, kvs_to_insert_letters_randomorder)
 
-    kvs_to_insert5 = [(10, 'c'),
+    kvs_to_insert_descending = [(10, 'c'),
                     (9, 'a'),
                     (8, 'z'),
                     (7, 'y'),
@@ -488,6 +506,16 @@ if __name__ == "__main__":
                     (1, 'x')]
     my_bst5 = RedBlackBST()
     recur_bst5 = RedBlackBST()
-    test_bst_2(my_bst5, recur_bst5, kvs_to_insert5)
+    test_bst_expected_output(my_bst5, recur_bst5, kvs_to_insert_descending)
 
+    kvs_to_insert_one = [(1, 'one')]
 
+    my_bst6 = RedBlackBST()
+    recur_bst5 = RedBlackBST()
+    test_bst_expected_output(my_bst5, recur_bst5, kvs_to_insert_one)
+
+    kvs_to_insert_none = []
+
+    my_bst5 = RedBlackBST()
+    recur_bst5 = RedBlackBST()
+    test_bst_expected_output(my_bst5, recur_bst5, kvs_to_insert_none)
