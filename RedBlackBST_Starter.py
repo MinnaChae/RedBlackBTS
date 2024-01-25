@@ -82,15 +82,10 @@ class RedBlackBST:
 
         # ONCE INSERTED, TRAVERSE UP CURR.PARENT - bubble up
             #Rotate Node
-        # temp = curr.parent
         temp = curr
 
         while temp:
             parent_node = temp.parent
-            # grandparent_node = temp.parent.parent
-            # if self._right_is_red(parent_node) and self._left_is_red(temp):
-                #if parent exist and parent is red
-                    #parent.grandparent is red
             if self._right_is_red(temp) and not self._left_is_red(temp):
                 if parent_node is None:
                     temp = self._rotate_left_i(temp)
@@ -135,16 +130,6 @@ class RedBlackBST:
         x.is_red = node.is_red
         node.is_red = True
 
-        # #node is curr.parent
-        # x = node.right
-        # #changing pointers
-        # node.right = x.left
-        # x.left = node
-        # x.parent = node.parent
-        # node.parent = x
-        # x.is_red = node.is_red
-        # node.is_red = True
-
         return x
 
     def _rotate_right_i(self, node):
@@ -154,7 +139,7 @@ class RedBlackBST:
         """
 
         x = node.left
-        # x_right = x.right
+
         node.left = x.right
         if x.right is not None:
             x.right.parent = node
@@ -164,13 +149,6 @@ class RedBlackBST:
         x.is_red = node.is_red
         node.is_red = True
 
-        # x = node.left
-        # node.left = x.right
-        # x.right = node
-        # x.parent = node.parent
-        # node.parent = x
-        # x.is_red = node.is_red
-        # node.is_red = True
         return x
 
 ########### THE BELOW METHODS ARE FOR STUDENT USE AND CAN BE USED AS IS IN THE INTERATIVE IMPLEMENTATION
@@ -314,18 +292,6 @@ class RedBlackBST:
         x.is_red = node.is_red
         node.is_red = True
         return x
-#print Pre order
-
-# class Node:
-#     def __init__(self, key, left=None, right=None):
-#         self.key = key
-#         self.left = left
-#         self.right = right
-
-
-# class PrintTree:
-#     def __init__(self, root=None):
-#         self.root = root
 
     def pre_order_recursive(self, node, result=None):
         if result is None:
@@ -393,12 +359,6 @@ def test_bst_2(my_bst, recur_bst, kvs_to_insert):
     same_count = 0
     total = 0
     print("Printing Test")
-    # print(f"this is len {len(tree_recur)}")
-    #
-    # for i in range(len(tree_recur)):
-    #     print(f'this is recur {tree_recur[i].key}')
-    #     print(f'this is my {tree_my[i].key}')
-
     for i in range(len(tree_recur)):
         total +=1
         # testing key
@@ -469,8 +429,6 @@ def test_bst_2(my_bst, recur_bst, kvs_to_insert):
         print(f'Passed {same_count}/{same_count+different_count} tests \n')
     if different_count != 0:
         print(f'Failed {different_count}/{same_count+different_count} tests \n')
-
-
 
 if __name__ == "__main__":
     bst = RedBlackBST()
