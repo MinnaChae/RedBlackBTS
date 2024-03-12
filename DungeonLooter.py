@@ -13,7 +13,9 @@ class Adventurer:
         self.coin_purse = {}
         self.inventory = []
         self.total_coin_purse_value = 0
-        self.total_carry_weight = carry_weight
+        self.total_possible_carry_weight = carry_weight
+        self.total_actual_carry_weight = 0
+        self.total_value=0
 
     def show_inventory(self):
         """
@@ -48,10 +50,23 @@ class Adventurer:
         dagger: Wgt=4, V=60
         jewels: Wgt=2, V=190
         """
-        items_str = "Adventurer \n"
+        advent_str = "=== SHOW INVENTORY === \n"
+        advent_str += f"Adventurer (Total Carry capacity: {self.total_possible_carry_weight}) \n"
+
+        items_total_carry_weight = 0
+        self.total_coin_purse_value = 0
         for items in self.inventory:
-            items_str += str(items.name)+ " : Wgt="+str(items.weight)+ " V=" +str(items.value)
+            items_str += str(items.name) + " : Wgt="+str(items.weight) + " V=" +str(items.value)
             items_str += '\n'
+            items_total_carry_weight += items.weight
+
+            self.total_actual_carry_weight += items.weight
+            self.total_value += items.value
+
+        advent_str += f"Total Carry Weight: {self.total_actual_carry_weight }\n"
+        advent_str += f"Total Carry Value: {self.total_value} \n"
+        advent_str += f"Total Coin Purse Value: {self.total_value} \n"
+        print(advent_str)
         print(items_str)
 
 
